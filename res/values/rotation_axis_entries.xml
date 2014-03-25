@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array
+	    name="rot_axis_entries">
+	    <item>@string/rotation_axis_y</item>
+	    <item>@string/rotation_axis_free</item>
+	</string-array>    
+</resources>

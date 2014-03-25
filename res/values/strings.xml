@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ObjView</string>
+    
+    <string name="about">About/Help</string>
+    <string name="about_text">This app is a 3D model viewer that displays high resolution meshes that you can interact with. This started as a way for me to learn Android development and OpenGL ES, but I will continue to improve this app over time. If you do find any issues or have comments on improvement feel free to contact me at bugs.ubertome@gmail.com.</string>
+    
+    <!-- Action buttons  -->
+    <string name="action_settings">Settings</string>
+    <string name="load_obj">Load OBJ..</string>
+    <string name="toggle_wireframe">Toggle Wireframe</string>
+    <string name="toggle_lights">Toggle Lighting</string>
+    <string name="move_lights">Move Light</string>
+    <string name="settings">Settings</string>
+	<string name="brightness_adjust_string">Brightness adjust</string>
+    <string name="brightness_up_string">Brightness up</string>
+	<string name="brightness_down_string">Brightness down</string>
+	<string name="lights_on">Turn lighting on</string>
+	<string name="lights_off">Turn lighting off</string>
+	<string name="more_options">More options</string>
+	<string name="stats_title">Stats</string>
+	<string name="projection_view_text">Toggle Projection View</string>
+    
+	<!-- activity/fragment strings -->
+    <string name="activity_title_page">TitlePageActivity</string>
+    <string name="title_activity_command_menu">CommandMenu</string>
+    <string name="title_activity_file_explorer">FileExplorer</string>
+    <string name="file_explorer_title_string">File Explorer</string>
+    <string name="recent_files_title_string">Recently opened files</string>
+    <string name="texture_select">Selext Textures</string>
+    <string name="test_render">Launch Renderer</string>
+    <string name="show_all_string">Show All</string>
+    
+    <!-- Settings strings -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_about_page">AboutPage</string>
+    <string name="nothing"></string>
+	<string name="recent_files_setting">Recent</string>
+	<string name="recent_obj">Recent Files</string>
+	<string name="recent_files_pref">com.ubertome.modelviewer.recent_files_pref</string>
+	<string name="default_pref">com.ubertome.modelviewer.default</string>
+	<string name="clear_recent_files">Clear recent files</string>
+	<string name="show_only_objs_string">Show OBJ folders</string>
+	<string name="show_only_tex_string">Show Texture folders</string>
+	<string name="fov_dialog_string">Enter a value in degrees</string>
+	<string name="rotation_axis_x">X relative</string>
+	<string name="rotation_axis_y">Y relative</string>
+	<string name="rotation_axis_z">Z relative</string>
+	<string name="rotation_axis_free">Free rotation</string>
+	
+	
+	
+	<!-- About page / Help page  -->
+	<string name="about_page_title">About This App</string>
+	<string name="how_to_use_title_string">How To Use This App</string>
+	<string name="how_to_use_string1">1. Select an OBJ file from the file browser. Currently, the file browser only shows compatible files.</string>
+	<string name="how_to_use_string2">2. Select a texture to apply to the model, or pick "Don't use a texture". Textures supported at this time are JPG, PNG and TGA formats.</string>
+	<string name="how_to_use_string3">3. Wait for it to load.</string>
+	<string name="render_help_title_string">The RenderView</string>
+	<string name="render_help_text_string">Once the model is loaded, you can rotate the model with one finger and pinch-to-zoom with two. Below is an overview of the main action buttons and what they do:</string>
+	<string name="wireframe_explanation">Wireframe Toggle \nToggles between rendering a polygonal or wireframe mesh.</string>
+	<string name="lighting_explanation">Lighting Toggle\nToggles lighting effects on or off.</string>
+	<string name="brightness_explanation">Brightness Control\nIncrease or decrease the color offset applied to the model</string>
+	<string name="projection_explanation">Projection View Toggle\nToggles between orthographic and perspective projection views (default is orthographic).</string>
+	<string name="settings_explanation">Settings\nSelf-explanatory.</string>
+	<string name="file_explorer_explanation">Load OBJ..\nClicking this opens the file browser from which you can select a model file to render. Depending on the size of your screen, it may be in the overflow menu. Currently only supports OBJ files.</string>
+	
+	<string name="pref_group_render">Rendering Settings</string>
+	<string name="pref_group_misc">Miscellaneous Settings</string>
+</resources>

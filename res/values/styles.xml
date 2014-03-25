@@ -1,0 +1,47 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Holo">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:actionBarStyle">@style/RenderActionBar</item>
+    </style>
+    
+    <style name="RenderTheme" parent="android:Theme.Holo">
+        <item name="android:actionBarStyle">@style/RenderActionBar</item>
+    </style>
+    
+    <style name="RenderActionBar" parent="android:style/Widget.Holo.ActionBar">
+        <item name="android:showDividers">beginning</item>
+        <item name="android:divider">@color/android_blue</item>
+    </style>
+    
+    <style name="DisableActionBar" parent="@android:style/Theme.Holo.NoActionBar">
+    </style>
+    
+    <style name="Fullscreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+    </style>
+    
+    <style name="BlueFrameButton">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/button_frame</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+</resources>

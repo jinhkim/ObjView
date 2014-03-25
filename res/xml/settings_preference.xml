@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_group_render_key"
+        android:title="@string/pref_group_render" >
+        <CheckBoxPreference
+            android:id="@+id/pref_culling"
+            android:defaultValue="true"
+            android:key="pref_culling_key"
+            android:summary="A.K.A. two-sided rendering. When enabled, only one side of a polygon will be rendered."
+            android:title="Enable back-face culling"/>
+
+        <EditTextPreference
+            android:id="@+id/pref_fovy"
+            android:defaultValue="25"
+            android:key="pref_fovy_key"
+            android:summary="Modify the vertical field of view (in degrees) for the perspective projection mode."
+            android:title="Edit field of view" />
+        
+        <SwitchPreference 
+            android:id="@+id/pref_select_rotation"
+            android:defaultValue="false"
+            android:persistent="true"
+            android:key="pref_toggle_rotation"
+            android:title="Toggle rotation axis"
+            android:summaryOn="Free rotation"
+            android:summaryOff="Rotations relative to Y-axis"/>
+        
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_group_misc_key"
+        android:title="@string/pref_group_misc" >
+        <Preference
+            android:id="@+id/pref_clear_recent"
+            android:key="pref_clear_recent_key"
+            android:title="Clear recent files" />
+        
+        <Preference
+            android:id="@+id/pref_bg_color"
+            android:key="pref_bg_color_key"
+            android:title="Change background brightness"
+            android:summary="Because sometimes the model is too dark to see properly."/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

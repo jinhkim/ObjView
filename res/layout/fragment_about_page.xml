@@ -1,0 +1,209 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" >
+
+        <TextView
+            android:id="@+id/about_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp"
+            android:text="@string/about_page_title"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:src="@drawable/view_divider" />
+
+        <TextView
+            android:id="@+id/about_text_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:text="@string/about_text" />
+
+<!-- how to use -->
+        <TextView
+            android:id="@+id/how_to_use_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp"
+            android:paddingTop="40sp"
+            android:text="@string/how_to_use_title_string"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:src="@drawable/view_divider" />
+        
+        <TextView
+            android:id="@+id/how_to_use_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:text="@string/how_to_use_string1" />
+        <TextView
+            android:id="@+id/how_to_use_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:text="@string/how_to_use_string2" />
+        <TextView
+            android:id="@+id/how_to_use_text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:text="@string/how_to_use_string3" />
+
+<!-- render view help -->
+        <TextView
+            android:id="@+id/render_help_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp"
+            android:paddingTop="40sp"
+            android:text="@string/render_help_title_string"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:src="@drawable/view_divider" />
+
+        <TextView
+            android:id="@+id/render_help_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:text="@string/render_help_text_string" />
+        
+        
+<!-- The button icon explanations -->
+<!-- wireframe icon -->
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5sp">
+
+            <ImageView
+                android:id="@+id/wireframe_img_id"
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ball_icon" 
+                android:scaleType="fitCenter"
+                android:paddingRight="10sp"/>
+            
+            <ImageView
+                android:id="@+id/wireframe_img_alt_id"
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ball_wireframe_icon" 
+                android:scaleType="fitCenter"
+                android:paddingRight="10sp"/>
+
+            <TextView
+                android:id="@+id/wireframe_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10sp"
+                android:text="@string/wireframe_explanation" />
+        </LinearLayout>
+        
+        <!-- lighting icon -->
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5sp">
+
+            <!-- <ImageView
+                android:id="@+id/brightness_img_id"
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/white_brightness_high" 
+                android:scaleType="fitCenter"
+                android:paddingRight="10sp"/> -->
+            
+            <ImageView
+                android:id="@+id/brightness_img_id"
+                android:layout_width="100sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/brightness_scale_icon" 
+                android:scaleType="fitCenter"
+                android:paddingRight="10sp"/>
+
+            <TextView
+                android:id="@+id/brightness_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10sp"
+                android:text="@string/brightness_explanation" />
+        </LinearLayout>
+        
+        <!-- projection icon -->
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5sp">
+
+            <ImageView
+                android:id="@+id/projection_img_id"
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/perspective_view_icon_thick" 
+                android:scaleType="fitCenter"
+                android:paddingRight="10sp"/>
+            
+            <ImageView
+                android:id="@+id/projection_img_alt_id"
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ortho_view_icon_thick" 
+                android:scaleType="fitCenter"
+                android:paddingRight="10sp"/>
+
+            <TextView
+                android:id="@+id/projection_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10sp"
+                android:text="@string/projection_explanation" />
+        </LinearLayout>
+        
+        <!-- folder icon -->
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp">
+
+            <ImageView
+                android:id="@+id/folder_open_img_id"
+                android:layout_width="100sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/folder_icon_custom_dark" 
+                android:scaleType="fitCenter"
+                android:paddingLeft="25sp"
+                android:paddingRight="25sp"/>
+
+            <TextView
+                android:id="@+id/folder_open_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                
+                android:text="@string/file_explorer_explanation" />
+        </LinearLayout>
+        
+</LinearLayout>
+
+</ScrollView>

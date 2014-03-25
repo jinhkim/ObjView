@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row_text_selected_id"
+    android:layout_width="fill_parent"
+    android:layout_height="50dp"
+    android:paddingLeft="5dp"
+    android:background="@drawable/rect_border_light"
+    android:gravity="center_vertical"
+    android:textColor="@color/lightgrey"
+    android:textSize="25sp"
+    
+    android:singleLine="true"
+    android:ellipsize="end"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:scrollHorizontally="true"/>

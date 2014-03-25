@@ -1,0 +1,70 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/toggle_wireframe_id"
+        android:showAsAction="always"
+        android:title="@string/toggle_wireframe"
+        android:icon="@drawable/ball_icon"/>
+
+    <!--
+            <item android:id="@+id/brightness_up_id"
+	        android:title="@string/brightness_up_string"
+	        android:icon="@drawable/white_brightness_high"
+	        android:showAsAction="always"/>
+    -->
+
+    <item
+        android:id="@+id/brightness_adjust_id"
+        android:showAsAction="always"
+        android:title="@string/brightness_adjust_string"
+        android:icon="@drawable/brightness_scale_icon"/>
+
+    <!--
+     	<item android:id="@+id/texture_select_id"
+	    	android:title="@string/texture_select"
+	    	android:icon="@drawable/texture_icon_light"
+	    	android:showAsAction="always"/>
+    -->
+
+    <item
+        android:id="@+id/projection_view_id"
+        android:showAsAction="always"
+        android:title="@string/projection_view_text"
+        android:icon="@drawable/perspective_view_icon_thick"/>
+    <item
+        android:id="@+id/open_file_id"
+        android:showAsAction="always"
+        android:title="@string/load_obj"
+        android:icon="@drawable/folder_icon_custom_dark"/>
+
+    <!-- Overflow menu -->
+    <item
+        android:id="@+id/overflow_menu_id"
+        android:showAsAction="always"
+        android:title="@string/more_options"
+        android:icon="@drawable/menu_icon">
+        <menu>
+            <item
+                android:id="@+id/toggle_lights_push_id"
+                android:title="@string/toggle_lights"
+                android:icon="@drawable/white_brightness_high"/>
+            <item
+                android:id="@+id/recent_files_id"
+                android:title="@string/recent_files_setting"
+                android:icon="@drawable/timer_icon"/>
+            <item
+                android:id="@+id/stats_id"
+                android:title="@string/stats_title"
+                android:icon="@drawable/stats_icon"/>
+            <item
+                android:id="@+id/settings_push_id"
+                android:title="@string/settings"
+                android:icon="@drawable/settings_icon"/>
+            <item
+                android:id="@+id/about_push_id"
+                android:title="@string/about"
+                android:icon="@drawable/question_icon"/>
+        </menu>
+    </item>
+
+</menu>

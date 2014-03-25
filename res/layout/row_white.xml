@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/row_text_white_id"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rect_border_light"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:paddingLeft="5dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@color/darkdark"
+        android:textSize="18sp" />
+
+<!-- </LinearLayout> -->
