@@ -21,6 +21,7 @@ import android.preference.PreferenceManager;
 import android.renderscript.Matrix3f;
 
 import com.ubertome.objview.RenderFragment.RenderConfig;
+import com.ubertome.objview.GLUtils;
 
 public class RendererGL implements GLSurfaceView.Renderer{
 	
@@ -30,13 +31,22 @@ public class RendererGL implements GLSurfaceView.Renderer{
 	
 	//because the renderer is running on a separate thread, 
 	//must declare 'volatile' 
-	public volatile float xAngle = 0.f, yAngle = 0.f, zAngle = 0.f, lightX, lightY = 4.0f,
+	public volatile float xAngle = 0.f, yAngle = 0.f, zAngle = 0.f, 
+						  lightX, lightY = 4.0f,
 						  xAccumAngle = 0, yAccumAngle = 0,
 						  xLastAngle = 0, yLastAngle = 0;
+	/**
+	 * angle (radians) to rotate model in FREE_ROTATION mode
+	 */
+	public volatile float rotationAngle = 0f;
 	public volatile float pinchScaleFactor = 1.0f, pinchLightDist = 1.5f,
 						  pinchAccumScale = 0, pinchLastScale = 0;
 	public volatile float translationX = 0, translationY = 0;
 	public volatile boolean enableLighting = true;
+	/**
+	 * axis to rotate model about in FREE_ROTATION mode
+	 */
+	public volatile Vector3 rotationAxis;
 	public boolean modelLoaded = false;
 	
 	private int mProgramHandle = -1;
@@ -52,7 +62,7 @@ public class RendererGL implements GLSurfaceView.Renderer{
 	ParsedObj obj = null;
 	GShader vert, frag;
 	ShaderProgram sp;
-	Quaternion modelMatrixQ, rotMatrixQ;
+	Quaternion modelMatrixQ, rotMatrixQ, freeRotQ;
 	Quaternion rotX, rotY, rotZ;
 	
 	Bitmap textBitmap;
@@ -65,7 +75,7 @@ public class RendererGL implements GLSurfaceView.Renderer{
 	float ratio;
 	public float fovy = 25;
 	
-	static float mModelMatrix[] = new float[16], mViewMatrix[] = new float[16], 
+	float mModelMatrix[] = new float[16], mViewMatrix[] = new float[16], 
 			mProjMatrix[] = new float[16], mMVPMatrix[] = new float[16], 
 			mMVMatrix[] = new float[16], mNormalMatrix[] = new float[16],
 			worldToEyeCamOrigin[] = new float[16], mRotMatrix[] = new float[16],
@@ -105,6 +115,7 @@ public class RendererGL implements GLSurfaceView.Renderer{
 		Mesh.setShaderProgram(mProgramHandle = sp.getHandle());
 		modelMatrixQ = new Quaternion();
 		rotMatrixQ = new Quaternion();
+		freeRotQ = new Quaternion();
 		vec3 = new float[3];
 		rotX = new Quaternion();
 		rotY = new Quaternion();
@@ -116,8 +127,11 @@ public class RendererGL implements GLSurfaceView.Renderer{
 		forwardVec = new float[3];
 		rightVec = new float[3];
 		upVec = new float[3];
+		Matrix.setIdentityM(mModelMatrix, 0);
 		Matrix.setIdentityM(mRotMatrix, 0);
 		Matrix.setIdentityM(mTransMatrix, 0);
+		Matrix.setIdentityM(mMVMatrix, 0);
+		rotationAxis = new Vector3(0.0f, 1.0f, 0.0f);
 		
 //		textBitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
 //		canvas = new Canvas(textBitmap);
@@ -212,17 +226,24 @@ public class RendererGL implements GLSurfaceView.Renderer{
 				
 				switch(rotAxis){
 				
-				case Y_AXIS:
+				case Y_AXIS:{
 					modelMatrixQ.buildFromEuler(-yAngle, -xAngle, 0);
 					modelMatrixQ.normalize();
 					mModelMatrix = modelMatrixQ.getMatrix();
-					Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 4, 0f, 0f, 0f, 0f, 1f, 0f);
 					camOrigin[0] = 0;
 					camOrigin[1] = 0;
 					camOrigin[2] = 4f;
 					break;
+				}
+				
+				case FREE_ROTATION:{
 					
-				case FREE_ROTATION:
+					freeRotQ.buildFromAxisAngle(
+							rotationAxis.getDataArray(), rotationAngle);
+					freeRotQ.normalize();
+					modelMatrixQ = freeRotQ.multiplyThisWith(modelMatrixQ);
+					mModelMatrix = modelMatrixQ.getMatrix();
+
 //					Matrix.setIdentityM(mModelMatrix, 0);
 //					rotMatrixQ.buildFromEuler(yAngle*0.01f*RAD2DEG, xAngle*0.01f*RAD2DEG, zAngle);
 //					rotMatrixQ.normalize();
@@ -231,10 +252,12 @@ public class RendererGL implements GLSurfaceView.Renderer{
 //					camOrigin[2] = -4*(float)Math.cos(xAngle*0.01f)-4*(float)Math.cos(yAngle*0.01f);
 //					LookAt(rotMatrixQ, camOrigin[0], camOrigin[1], camOrigin[2]);
 					break;
+				}
 				default:
 					break;
 				}
 				
+				Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 4, 0f, 0f, 0f, 0f, 1f, 0f);
 				
 				//Adjust mesh to the center of the world and scale to unit size
 				Matrix.scaleM(mModelMatrix, 0, pinchScaleFactor,
@@ -295,17 +318,17 @@ public class RendererGL implements GLSurfaceView.Renderer{
 		forwardVec[0] = targetX - eyeX;
 		forwardVec[1] = targetY - eyeX;
 		forwardVec[2] = targetZ - eyeZ;
-		forwardVec = normalize(forwardVec);
+		forwardVec = GLUtils.normalize(forwardVec);
 
 		// compute right vector
-		rightVec = crossProduct(forwardVec[0], forwardVec[1], forwardVec[2],
+		rightVec = GLUtils.crossProduct(forwardVec[0], forwardVec[1], forwardVec[2],
 								upVec[0], upVec[1], upVec[2]);
-		rightVec = normalize(rightVec);
+		rightVec = GLUtils.normalize(rightVec);
 
 		// re-compute up vector for consistency
-		upVec = crossProduct(rightVec[0], rightVec[1], rightVec[2], 
+		upVec = GLUtils.crossProduct(rightVec[0], rightVec[1], rightVec[2], 
 							forwardVec[0], forwardVec[1], forwardVec[2]);
-		upVec = normalize(upVec);
+		upVec = GLUtils.normalize(upVec);
 		
 		mRotMatrix[0] = rightVec[0];
 		mRotMatrix[1] = upVec[0];
@@ -448,21 +471,4 @@ public class RendererGL implements GLSurfaceView.Renderer{
 		}
 	}
 	
-	
-	private float[] crossProduct(float ax, float ay, float az, float bx, float by, float bz){
-		float[] ans = new float[3];
-		ans[0] = ay*bz - az*by;
-		ans[1] = az*bx - ax*bz;
-		ans[2] = ax*by - ay*bx; 
-		return ans;
-	}
-	
-	private float[] normalize(float[] vec){
-		float mag = (float) Math.sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
-		vec[0] = vec[0] / mag;
-		vec[1] = vec[1] / mag;
-		vec[2] = vec[2] / mag;
-		return vec;
-	}
-
 }

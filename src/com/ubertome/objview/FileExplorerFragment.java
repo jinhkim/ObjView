@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -243,6 +244,7 @@ public class FileExplorerFragment extends ListFragment implements
 		}
 
 		fileBrowserTitle.setText(R.string.recent_files_title_string);
+		fileBrowserTitle.setTextSize(16);
 		ImageView iv = (ImageView) getView().findViewById(
 				R.id.file_browser_divider);
 		iv.setImageResource(R.drawable.view_divider);
@@ -326,7 +328,8 @@ public class FileExplorerFragment extends ListFragment implements
 
 		if (selectingTextures) {
 			Resources res = getResources();
-			fileBrowserTitle.setText("Choose a texture for: " + modelFileName);
+			fileBrowserTitle.setText(Html.fromHtml("Choose a texture for:<br>" + "<i>" + modelFileName + "</i>"));
+			fileBrowserTitle.setTextSize(16);
 			ImageView iv = (ImageView) currentView
 					.findViewById(R.id.file_browser_divider);
 			iv.setImageResource(R.drawable.view_divider_alt);
@@ -337,7 +340,8 @@ public class FileExplorerFragment extends ListFragment implements
 			itemPath.add(0, "Don't use a Texture");
 		} else {
 			Resources res = getResources();
-			fileBrowserTitle.setText("Choose model to load (OBJ only)");
+			fileBrowserTitle.setText("Choose model to load \n(OBJ only)");
+			fileBrowserTitle.setTextSize(16);
 			ImageView iv = (ImageView) currentView
 					.findViewById(R.id.file_browser_divider);
 			iv.setImageResource(R.drawable.view_divider);

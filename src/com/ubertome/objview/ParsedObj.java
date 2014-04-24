@@ -33,7 +33,7 @@ public class ParsedObj {
 	
 	/**
 	 * This list keeps track of how many points have been parsed since
-	 * the last occurence of 'f' or the faces element in the file to parse.
+	 * the last occurrence of 'f' or the faces element in the file to parse.
 	 * Used only when dealing with negative vertex reference members<br><br>
 	 * <b>e.g.</b> <br><br>
 	 * v 0.000000 2.000000 2.000000<br>
@@ -75,7 +75,7 @@ public class ParsedObj {
 	ElementType element;
 	
 	/**
-	 * <b>Constructor</b> Parses a OBJ file given a path and filename
+	 * <b>Constructor</b> Parses an OBJ file given a path and filename
 	 * 
 	 * @param <b><i>filename</i></b> name of full path to file
 	 */

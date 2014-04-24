@@ -75,32 +75,27 @@ public class Quaternion {
 	public Quaternion multiplyWith(Quaternion rhs) {
 		float qw = w, qx = x, qy = y, qz = z;
 		float ww, xx, yy, zz;
-		ww = qw * rhs.w - qx * rhs.x - qy * rhs.y - qz * rhs.z;
-		xx = qw * rhs.x + qx * rhs.w - qy * rhs.z + qz * rhs.y;
-		yy = qw * rhs.y + qx * rhs.z + qy * rhs.w - qz * rhs.x;
-		zz = qw * rhs.z - qx * rhs.y + qy * rhs.x + qz * rhs.w;
+		ww = (qw * rhs.w) - (qx * rhs.x) - (qy * rhs.y) - (qz * rhs.z);
+		xx = (qw * rhs.x) + (qx * rhs.w) + (qy * rhs.z) - (qz * rhs.y);
+		yy = (qw * rhs.y) - (qx * rhs.z) + (qy * rhs.w) + (qz * rhs.x);
+		zz = (qw * rhs.z) + (qx * rhs.y) - (qy * rhs.x) + (qz * rhs.w);
 		return new Quaternion(ww, xx, yy, zz);
 	}
 	
 	/**
-	 * Does the same thing as {@link #multiplyWith(Quaternion) multiplyWith}, but instead modifies this
-	 * Quaternion and returns itself
+	 * Does the same thing as {@link #multiplyWith(Quaternion) multiplyWith}, but instead modifies
+	 * argument Quaternion and returns it.
 	 * @param rhs
-	 * @return this
+	 * @return modified rhs
 	 */
 	public Quaternion multiplyThisWith(Quaternion rhs) {
-		float qw = w, qx = x, qy = y, qz = z;
-		float ww, xx, yy, zz;
-		ww = qw * rhs.w - qx * rhs.x - qy * rhs.y - qz * rhs.z;
-		xx = qw * rhs.x + qx * rhs.w - qy * rhs.z + qz * rhs.y;
-		yy = qw * rhs.y + qx * rhs.z + qy * rhs.w - qz * rhs.x;
-		zz = qw * rhs.z - qx * rhs.y + qy * rhs.x + qz * rhs.w;
+		float ww = rhs.w, xx = rhs.x, yy = rhs.y, zz = rhs.z;
+		rhs.w = (w * ww) - (x * xx) - (y * yy) - (z * zz);
+		rhs.x = (w * xx) + (x * ww) + (y * zz) - (z * yy);
+		rhs.y = (w * yy) - (x * zz) + (y * ww) + (z * xx);
+		rhs.z = (w * zz) + (x * yy) - (y * xx) + (z * ww);
 		
-		w = ww; 
-		x = xx;
-		y = yy;
-		z = zz;
-		return this;
+		return rhs;
 	}
 
 	/**
@@ -132,10 +127,10 @@ public class Quaternion {
 	 * @param axis
 	 *            as a <code>Vector{@literal <}Float{@literal >}</code>
 	 * @param angle
-	 *            in degrees
+	 *            in radians
 	 */
 	public void buildFromAxisAngle(Vector<Float> axis, float angle) {
-		angle *= DEG2RAD;
+//		angle *= DEG2RAD;
 		angle *= 0.5;
 		float sinAngle = (float) Math.sin(angle);
 		Quaternion quat = new Quaternion(axis.get(0), axis.get(1), axis.get(2),

@@ -143,7 +143,7 @@ public class MainActivity extends Activity implements FileExplorerFragment.FragT
 								throw new Exception(
 										"Failed to create directory!");
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
+								android.util.Log.w("FILE_ERROR", "Failed to create directory to copy model files into!");
 								e.printStackTrace();
 							}
 						}

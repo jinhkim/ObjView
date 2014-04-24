@@ -2,6 +2,7 @@ package com.ubertome.objview;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Vector;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -19,6 +20,7 @@ import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -47,6 +49,8 @@ import android.widget.Toast;
 
 import com.ubertome.objview.RendererGL.RotationAxis;
 import com.ubertome.objview.MainActivity.ActionIcons;
+import com.ubertome.objview.GLUtils;
+import com.ubertome.objview.Vector3;
 
 public class RenderFragment extends Fragment {
 
@@ -510,8 +514,6 @@ public class RenderFragment extends Fragment {
 //		recentDialog.dismiss();
 		parseModelFile(modelPath, texturePath);
 	}
-	
-
 	/***********************************
 	 * 
 	 * RenderConfig class
@@ -663,8 +665,11 @@ public class RenderFragment extends Fragment {
 		private int activePointerId = INVALID_POINTER_ID,
 				activePointerId2 = INVALID_POINTER_ID;
 		private float xAngleTravelled = 0, yAngleTravelled = 0;
+		private float[] mMVMatrixInv, tempVec;
 		private PointF pointer1, pointer1Old, pointer2, pointer2Old, mid,
 				midOld;
+		private Vector3 ndcPt, ndcPtOld;
+//		private Matrix3 mvMatrix;
 
 		private boolean pointer1Down = false, pointer2Down = false;
 
@@ -683,13 +688,18 @@ public class RenderFragment extends Fragment {
 
 			pinchToScale = new ScaleGestureDetector(context,
 					new ScaleListener());
-
+			
 			pointer1 = new PointF();
 			pointer1Old = new PointF();
 			pointer2 = new PointF();
 			pointer2Old = new PointF();
 			mid = new PointF();
 			midOld = new PointF();
+			ndcPt = new Vector3();
+			ndcPtOld = new Vector3();
+			mMVMatrixInv = new float[16];
+			tempVec = new float[4];
+//			mvMatrix = new Matrix3();
 
 			// create OpenGL ES 2.0 context
 			setEGLContextClientVersion(2);
@@ -764,7 +774,10 @@ public class RenderFragment extends Fragment {
 				case MotionEvent.ACTION_MOVE: {
 					// this is the INDEX of the pointer, which has location info
 	//				int pointerIndex = e.findPointerIndex(activePointerId);
-	
+					
+					if(!mRenderer.modelLoaded){
+						break;
+					}
 					float x = xOld, y = yOld;
 					
 					if(e.getPointerCount() < 2){
@@ -773,18 +786,31 @@ public class RenderFragment extends Fragment {
 					}
 					
 					else if (e.getPointerCount() == 2 ) {
+						//translate model
 						
-//						
-//						float midDisplacementX = (mid.x + midOld.x)/2 * 0.01f;
-//						float midDisplacementY = (mid.y + midOld.y)/2 * 0.01f;
-//	
-//						mRenderer.translationX = midDisplacementX;
-//						mRenderer.translationY = midDisplacementY;
+						
+						//rotate model about Z-axis
+						
+						/*ndcPt.setX((2 * x / WINDOW_WIDTH) - 1);
+						ndcPt.setY(-((2 * y / WINDOW_HEIGHT) - 1));
+						float xy = ndcPt.getX() * ndcPt.getX() + 
+								 ndcPt.getY() * ndcPt.getY();
+						if(xy >= 1.0f) ndcPt.normalize();
+						ndcPt.setZ((float)Math.sqrt(1 - xy));
+						ndcPt.normalize();
+						
+						ndcPtOld.setX((2 * xOld / WINDOW_WIDTH) - 1);
+						ndcPtOld.setY(-((2 * yOld / WINDOW_HEIGHT) - 1));
+						float xyOld = ndcPtOld.getX() * ndcPtOld.getX() + 
+								 ndcPtOld.getY() * ndcPtOld.getY();
+						if(xyOld >= 1.0f) ndcPtOld.normalize();
+						ndcPtOld.setZ((float) Math.sqrt(1 - xyOld));
+						ndcPtOld.normalize();*/
 //						requestRender();
 					}
 					// don't register single touch inputs when pinchToScale gesture
 					// processing is happening
-					if (!pinchToScale.isInProgress() && e.getPointerCount() < 2) {
+					if (!pinchToScale.isInProgress() && e.getPointerCount() == 1) {
 						float dx = x - xOld;
 						float dy = y - yOld;
 	
@@ -792,10 +818,47 @@ public class RenderFragment extends Fragment {
 						if (toggleMoveLight) {
 							mRenderer.lightX += (dx * TOUCH_SCALE_FACTOR * 0.05);
 							mRenderer.lightY += (-dy * TOUCH_SCALE_FACTOR * 0.05);
-						} else {
-							mRenderer.xAngle += (dy * TOUCH_SCALE_FACTOR) % 360.0f;
-							mRenderer.yAngle += (dx * TOUCH_SCALE_FACTOR) % 360.0f;
-						}
+						} 
+						else {
+							RotationAxis rotationType = renderConfig.getRotationAxis();
+							if(rotationType == RotationAxis.Y_AXIS){
+								mRenderer.xAngle += (dy * TOUCH_SCALE_FACTOR) % 360.0f;
+								mRenderer.yAngle += (dx * TOUCH_SCALE_FACTOR) % 360.0f;
+							}
+							
+							//if free rotation, convert 2D viewport coordinates to
+							// 3D Normalized Device Coordinates
+							else if(rotationType == RotationAxis.FREE_ROTATION)
+							{
+								if(dx != 0 || dy != 0) {
+									ndcPt.setX((2 * x / WINDOW_WIDTH) - 1);
+									ndcPt.setY(-((2 * y / WINDOW_HEIGHT) - 1));
+									float xy = ndcPt.getX() * ndcPt.getX() + 
+											 ndcPt.getY() * ndcPt.getY();
+									if(xy >= 1.0f) ndcPt.normalize();
+									ndcPt.setZ((float)Math.sqrt(1 - xy));
+									ndcPt.normalize();
+									
+									ndcPtOld.setX((2 * xOld / WINDOW_WIDTH) - 1);
+									ndcPtOld.setY(-((2 * yOld / WINDOW_HEIGHT) - 1));
+									float xyOld = ndcPtOld.getX() * ndcPtOld.getX() + 
+											 ndcPtOld.getY() * ndcPtOld.getY();
+									if(xyOld >= 1.0f) ndcPtOld.normalize();
+									ndcPtOld.setZ((float) Math.sqrt(1 - xyOld));
+									ndcPtOld.normalize();
+									
+									Matrix.invertM(mMVMatrixInv, 0, mRenderer.mMVMatrix, 0);
+									Matrix.multiplyMV(tempVec, 0, mMVMatrixInv, 0, 
+											GLUtils.crossProduct(ndcPtOld, ndcPt).getVector4(0), 0);
+									mRenderer.rotationAxis.setNewVector(tempVec);
+									mRenderer.rotationAngle = -3.0f * (float) Math.acos(Math.min(1.0, GLUtils.dotProduct(ndcPtOld, ndcPt)));
+								}
+								else {
+//									mRenderer.rotationAxis.setVector(0f, 1f, 0f);
+									mRenderer.rotationAngle = 0.0f;
+								}
+							}
+						} 
 						requestRender();
 					}
 					
@@ -803,6 +866,7 @@ public class RenderFragment extends Fragment {
 	
 					xOld = x;
 					yOld = y;
+//					ndcPtOld = ndcPt;
 					midOld.x = mid.x;
 					midOld.y = mid.y;
 					break;
@@ -862,7 +926,7 @@ public class RenderFragment extends Fragment {
 		// Listener class for pinch-zoom gestures
 		private class ScaleListener extends
 				ScaleGestureDetector.SimpleOnScaleGestureListener {
-
+			
 			@Override
 			public boolean onScale(ScaleGestureDetector det) {
 				if (toggleMoveLight) {
@@ -874,21 +938,21 @@ public class RenderFragment extends Fragment {
 					mRenderer.pinchScaleFactor = Math.min(
 							Math.max(0.01f, mRenderer.pinchScaleFactor), 25.0f);
 				}
-
+				mRenderer.rotationAngle = 0f;
 				requestRender();
 				return true;
 			}
 
 		}
 		
-		private class DragListener extends GestureDetector.SimpleOnGestureListener {
+/*		private class DragListener extends GestureDetector.SimpleOnGestureListener {
 			
 			@Override
 			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distX, float distY){
 				
 				return true;
 			}
-		}
+		}*/
 
 		public void loadModel(ParsedObj obj) {
 			mRenderer.loadModel(obj);
@@ -898,6 +962,7 @@ public class RenderFragment extends Fragment {
 		public void requestGLRender() {
 			requestRender();
 		}
+		
 	}
 
 	/*************************************************************************
