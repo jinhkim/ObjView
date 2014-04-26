@@ -833,25 +833,36 @@ public class RenderFragment extends Fragment {
 								if(dx != 0 || dy != 0) {
 									ndcPt.setX((2 * x / WINDOW_WIDTH) - 1);
 									ndcPt.setY(-((2 * y / WINDOW_HEIGHT) - 1));
-									float xy = ndcPt.getX() * ndcPt.getX() + 
-											 ndcPt.getY() * ndcPt.getY();
-									if(xy >= 1.0f) ndcPt.normalize();
-									ndcPt.setZ((float)Math.sqrt(1 - xy));
+									float xy = ndcPt.getX() * ndcPt.getX() + ndcPt.getY() * ndcPt.getY();
+									
+									if(xy >= 1.0f) { 
+										ndcPt.normalize();
+									}
+									ndcPt.setZ(ndcPt.getMissingZ());
 									ndcPt.normalize();
+									
 									
 									ndcPtOld.setX((2 * xOld / WINDOW_WIDTH) - 1);
 									ndcPtOld.setY(-((2 * yOld / WINDOW_HEIGHT) - 1));
-									float xyOld = ndcPtOld.getX() * ndcPtOld.getX() + 
-											 ndcPtOld.getY() * ndcPtOld.getY();
-									if(xyOld >= 1.0f) ndcPtOld.normalize();
-									ndcPtOld.setZ((float) Math.sqrt(1 - xyOld));
+									float xyOld = ndcPtOld.getX() * ndcPtOld.getX() + ndcPtOld.getY() * ndcPtOld.getY();
+									
+									if(xyOld >= 1.0f) {
+										ndcPtOld.normalize();
+									}
+									ndcPtOld.setZ(ndcPtOld.getMissingZ());
 									ndcPtOld.normalize();
 									
 									Matrix.invertM(mMVMatrixInv, 0, mRenderer.mMVMatrix, 0);
 									Matrix.multiplyMV(tempVec, 0, mMVMatrixInv, 0, 
 											GLUtils.crossProduct(ndcPtOld, ndcPt).getVector4(0), 0);
 									mRenderer.rotationAxis.setNewVector(tempVec);
-									mRenderer.rotationAngle = -3.0f * (float) Math.acos(Math.min(1.0, GLUtils.dotProduct(ndcPtOld, ndcPt)));
+									mRenderer.rotationAngle = -3.0f * (float) Math.acos(
+											Math.max(-1.0000000d,
+													Math.min(1.0000000d, GLUtils.dotProduct(ndcPtOld, ndcPt))
+											));
+									if(Float.isNaN(mRenderer.rotationAngle)){
+										android.util.Log.e("NUMBER_ERROR", "mRenderer.rotationAngle has a wonky value");
+									}
 								}
 								else {
 //									mRenderer.rotationAxis.setVector(0f, 1f, 0f);
@@ -888,6 +899,8 @@ public class RenderFragment extends Fragment {
 						activePointerId = INVALID_POINTER_ID;
 	//				else
 						activePointerId2 = INVALID_POINTER_ID;
+						
+						mRenderer.rotationAngle = 0.0f;
 					break;
 				}
 	

@@ -62,7 +62,7 @@ public class RendererGL implements GLSurfaceView.Renderer{
 	ParsedObj obj = null;
 	GShader vert, frag;
 	ShaderProgram sp;
-	Quaternion modelMatrixQ, rotMatrixQ, freeRotQ;
+	Quaternion modelMatrixQ, rotMatrixQ, freeRotQ, yAxisRotQ;
 	Quaternion rotX, rotY, rotZ;
 	
 	Bitmap textBitmap;
@@ -116,6 +116,7 @@ public class RendererGL implements GLSurfaceView.Renderer{
 		modelMatrixQ = new Quaternion();
 		rotMatrixQ = new Quaternion();
 		freeRotQ = new Quaternion();
+		yAxisRotQ = new Quaternion();
 		vec3 = new float[3];
 		rotX = new Quaternion();
 		rotY = new Quaternion();
@@ -229,10 +230,8 @@ public class RendererGL implements GLSurfaceView.Renderer{
 				case Y_AXIS:{
 					modelMatrixQ.buildFromEuler(-yAngle, -xAngle, 0);
 					modelMatrixQ.normalize();
+//					yAxisRotQ.multiplyThisWith(modelMatrixQ);
 					mModelMatrix = modelMatrixQ.getMatrix();
-					camOrigin[0] = 0;
-					camOrigin[1] = 0;
-					camOrigin[2] = 4f;
 					break;
 				}
 				

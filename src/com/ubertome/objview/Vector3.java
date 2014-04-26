@@ -62,6 +62,18 @@ public class Vector3 {
 		data = new float[] { vec[0], vec[1], vec[2] };
 	}
 	
+	public float getMissingX(){
+		return (float)Math.sqrt(1 - (data[1]*data[1] + data[2]*data[2]));
+	}
+	
+	public float getMissingY(){
+		return (float)Math.sqrt(1 - (data[0]*data[0] + data[2]*data[2]));
+	}
+	
+	public float getMissingZ(){
+		return (float)Math.sqrt(1 - (data[0]*data[0] + data[1]*data[1]));
+	}
+	
 	public float getX() {
 		return data[0];
 	}

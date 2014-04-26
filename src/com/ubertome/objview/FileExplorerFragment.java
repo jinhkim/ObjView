@@ -370,6 +370,9 @@ public class FileExplorerFragment extends ListFragment implements
 	public void onListItemClick(ListView lv, View v, int position, long id) {
 
 		String filePath = itemPath.get(position);
+		
+		//highlight selection
+//		fileArray.setItemSelected(position);
 
 		if (filePath.equals("Go To Root"))
 			filePath = root;

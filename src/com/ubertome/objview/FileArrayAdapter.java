@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 public class FileArrayAdapter extends ArrayAdapter<String> {
 	
+	private static boolean itemSelected = false;
+	
 	Context context;
 	List<String> fileObjects;
 	Resources res;
@@ -77,5 +79,9 @@ public class FileArrayAdapter extends ArrayAdapter<String> {
 		}
 		return row;
 	}
+	
+//	public void setItemSelected(int position){
+//		fileObjects.get(position);
+//	}
 
 }
