@@ -62,6 +62,7 @@ public class RenderFragment extends Fragment {
 	private float xOld = 0.0f, yOld = 0.0f;
 	private String mModelPath;
 	private float screenDensity = 0.0f;
+	private int WINDOW_WIDTH = 0, WINDOW_HEIGHT = 0;
 
 	private static float TOUCH_SCALE_FACTOR = 180.0f / 320.0f;
 	private boolean toggleMoveLight = false, settingsCreated = false, explorerCreated = false, recentExplorerCreated = false, brightnessSliderCreated = false,
@@ -231,6 +232,9 @@ public class RenderFragment extends Fragment {
 //													+"\nFaces: " + parsedModel.getAltProgress(), Toast.LENGTH_LONG).show();
 		}*/
 //		mGLView = new CustomGLView(getActivity());
+		mRenderer.rotationAngle = 0f;
+		WINDOW_WIDTH = getWindowWidth();
+		WINDOW_HEIGHT = getWindowHeight();
 		mGLView.requestRender();
 	}
 	
@@ -514,6 +518,23 @@ public class RenderFragment extends Fragment {
 //		recentDialog.dismiss();
 		parseModelFile(modelPath, texturePath);
 	}
+	
+	public int getWindowWidth(){
+		Display display = getActivity().getWindow().getWindowManager().getDefaultDisplay();
+
+		Point pt = new Point();
+		display.getSize(pt);
+		return pt.x;
+	}
+	
+	public int getWindowHeight(){
+		Display display = getActivity().getWindow().getWindowManager().getDefaultDisplay();
+
+		Point pt = new Point();
+		display.getSize(pt);
+		return pt.y;
+	}
+	
 	/***********************************
 	 * 
 	 * RenderConfig class
@@ -660,7 +681,6 @@ public class RenderFragment extends Fragment {
 
 		private ScaleGestureDetector pinchToScale;
 		private static final int INVALID_POINTER_ID = -1;
-		private int WINDOW_WIDTH = 0, WINDOW_HEIGHT = 0;
 
 		private int activePointerId = INVALID_POINTER_ID,
 				activePointerId2 = INVALID_POINTER_ID;
@@ -678,13 +698,8 @@ public class RenderFragment extends Fragment {
 
 			// Resources res = context.getResources();
 			// AssetManager assetManager = context.getAssets();
-
-			Display display = getActivity().getWindow().getWindowManager().getDefaultDisplay();
-
-			Point pt = new Point();
-			display.getSize(pt);
-			WINDOW_WIDTH = pt.x;
-			WINDOW_HEIGHT = pt.y;
+			WINDOW_WIDTH = getWindowWidth();
+			WINDOW_HEIGHT = getWindowHeight();
 
 			pinchToScale = new ScaleGestureDetector(context,
 					new ScaleListener());
@@ -966,6 +981,8 @@ public class RenderFragment extends Fragment {
 				return true;
 			}
 		}*/
+		
+		
 
 		public void loadModel(ParsedObj obj) {
 			mRenderer.loadModel(obj);
